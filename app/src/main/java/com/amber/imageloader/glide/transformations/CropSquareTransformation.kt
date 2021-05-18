@@ -1,4 +1,10 @@
-package com.amber.imageloader.glide.transformations;
+package com.amber.imageloader.glide.transformations
+
+import android.content.Context
+import android.graphics.Bitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 
 /**
  * Copyright (C) 2017 Wasabeef
@@ -15,49 +21,32 @@ package com.amber.imageloader.glide.transformations;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class CropSquareTransformation(private val mBitmapPool: BitmapPool) : BitmapTransformation(
+    mBitmapPool
+) {
+    private var mWidth = 0
+    private var mHeight = 0
 
-import android.content.Context;
-import android.graphics.Bitmap;
+    constructor(context: Context?) : this(Glide.get(context).bitmapPool) {}
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-
-public class CropSquareTransformation implements Transformation<Bitmap> {
-
-  private BitmapPool mBitmapPool;
-  private int mWidth;
-  private int mHeight;
-
-  public CropSquareTransformation(Context context) {
-    this(Glide.get(context).getBitmapPool());
-  }
-
-  public CropSquareTransformation(BitmapPool pool) {
-    this.mBitmapPool = pool;
-  }
-
-  @Override
-  public Resource<Bitmap> transform(Resource<Bitmap> resource, int outWidth, int outHeight) {
-    Bitmap source = resource.get();
-    int size = Math.min(source.getWidth(), source.getHeight());
-
-    mWidth = (source.getWidth() - size) / 2;
-    mHeight = (source.getHeight() - size) / 2;
-
-    Bitmap.Config config =
-        source.getConfig() != null ? source.getConfig() : Bitmap.Config.ARGB_8888;
-    Bitmap bitmap = mBitmapPool.get(mWidth, mHeight, config);
-    if (bitmap == null) {
-      bitmap = Bitmap.createBitmap(source, mWidth, mHeight, size, size);
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int
+    ): Bitmap {
+        val size = Math.min(toTransform.width, toTransform.height)
+        mWidth = (toTransform.width - size) / 2
+        mHeight = (toTransform.height - size) / 2
+        val config = if (toTransform.config != null) toTransform.config else Bitmap.Config.ARGB_8888
+        var bitmap = mBitmapPool[mWidth, mHeight, config]
+        if (bitmap == null) {
+            bitmap = Bitmap.createBitmap(toTransform, mWidth, mHeight, size, size)
+        }
+        return bitmap
     }
 
-    return BitmapResource.obtain(bitmap, mBitmapPool);
-  }
-
-  @Override public String getId() {
-    return "CropSquareTransformation(width=" + mWidth + ", height=" + mHeight + ")";
-  }
+    override fun getId(): String {
+        return "CropSquareTransformation(width=$mWidth, height=$mHeight)"
+    }
 }

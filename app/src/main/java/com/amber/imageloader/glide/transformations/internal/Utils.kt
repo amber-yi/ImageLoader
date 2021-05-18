@@ -1,9 +1,11 @@
-package com.amber.imageloader.glide.transformations.internal;
+package com.amber.imageloader.glide.transformations.internal
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.util.Log
 
 /**
  * Copyright (C) 2017 Wasabeef
@@ -20,29 +22,22 @@ import android.os.Build;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-public final class Utils {
-
-  private Utils() {
-    // Utility class.
-  }
-
-  public static Drawable getMaskDrawable(Context context, int maskId) {
-    Drawable drawable;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      drawable = context.getDrawable(maskId);
-    } else {
-      drawable = context.getResources().getDrawable(maskId);
+object Utils {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @JvmStatic
+    fun getMaskDrawable(context: Context, maskId: Int): Drawable? {
+        val drawable: Drawable? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            context.getDrawable(maskId)
+        } else {
+            context.resources.getDrawable(maskId)
+        }
+        if(drawable==null){
+            Log.e("Utils","maskId is invalid")
+        }
+        return drawable
     }
 
-    if (drawable == null) {
-      throw new IllegalArgumentException("maskId is invalid");
+    fun toDp(px: Int): Int {
+        return px * Resources.getSystem().displayMetrics.density.toInt()
     }
-
-    return drawable;
-  }
-
-  public static int toDp(int px) {
-    return px * (int) Resources.getSystem().getDisplayMetrics().density;
-  }
 }

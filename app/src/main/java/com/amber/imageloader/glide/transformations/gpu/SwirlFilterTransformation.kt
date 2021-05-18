@@ -31,6 +31,12 @@ class SwirlFilterTransformation @JvmOverloads constructor(
     private val mAngle: Float = 1.0f,
     private val mCenter: PointF = PointF(0.5f, 0.5f)
 ) : GPUFilterTransformation<GPUImageSwirlFilter?>(context, pool, GPUImageSwirlFilter()) {
+
+    /**
+     * @param radius from 0.0 to 1.0, default 0.5
+     * @param angle minimum 0.0, default 1.0
+     * @param center default (0.5, 0.5)
+     */
     constructor(context: Context?, radius: Float, angle: Float, center: PointF) : this(
         context,
         Glide.get(context).bitmapPool,
@@ -44,11 +50,6 @@ class SwirlFilterTransformation @JvmOverloads constructor(
                 ",angle=" + mAngle + ",center=" + mCenter.toString() + ")"
     }
 
-    /**
-     * @param radius from 0.0 to 1.0, default 0.5
-     * @param angle minimum 0.0, default 1.0
-     * @param center default (0.5, 0.5)
-     */
     init {
         getFilter()?.let {
             it.setRadius(mRadius)

@@ -1,14 +1,11 @@
-package com.amber.imageloader.glide.transformations.internal;
+package com.amber.imageloader.glide.transformations.internal
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Build;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RSRuntimeException;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.annotation.TargetApi
+import android.content.Context
+import android.graphics.Bitmap
+import android.os.Build
+import android.renderscript.*
+import android.renderscript.RenderScript.RSMessageHandler
 
 /**
  * Copyright (C) 2017 Wasabeef
@@ -25,42 +22,34 @@ import android.renderscript.ScriptIntrinsicBlur;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-public class RSBlur {
-
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-  public static Bitmap blur(Context context, Bitmap bitmap, int radius) throws RSRuntimeException {
-    RenderScript rs = null;
-    Allocation input = null;
-    Allocation output = null;
-    ScriptIntrinsicBlur blur = null;
-    try {
-      rs = RenderScript.create(context);
-      rs.setMessageHandler(new RenderScript.RSMessageHandler());
-      input = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE,
-              Allocation.USAGE_SCRIPT);
-      output = Allocation.createTyped(rs, input.getType());
-      blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-
-      blur.setInput(input);
-      blur.setRadius(radius);
-      blur.forEach(output);
-      output.copyTo(bitmap);
-    } finally {
-      if (rs != null) {
-        rs.destroy();
-      }
-      if (input != null) {
-          input.destroy();
-      }
-      if (output != null) {
-          output.destroy();
-      }
-      if (blur != null) {
-          blur.destroy();
-      }
+object RSBlur {
+    @JvmStatic
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @Throws(RSRuntimeException::class)
+    fun blur(context: Context?, bitmap: Bitmap, radius: Int): Bitmap {
+        var rs: RenderScript? = null
+        var input: Allocation? = null
+        var output: Allocation? = null
+        var blur: ScriptIntrinsicBlur? = null
+        try {
+            rs = RenderScript.create(context)
+            rs.messageHandler = RSMessageHandler()
+            input = Allocation.createFromBitmap(
+                rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT
+            )
+            output = Allocation.createTyped(rs, input.type)
+            blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+            blur.setInput(input)
+            blur.setRadius(radius.toFloat())
+            blur.forEach(output)
+            output.copyTo(bitmap)
+        } finally {
+            rs?.destroy()
+            input?.destroy()
+            output?.destroy()
+            blur?.destroy()
+        }
+        return bitmap
     }
-
-    return bitmap;
-  }
 }

@@ -3,10 +3,8 @@ package com.amber.imageloader.glide.transformations.gpu
 import android.content.Context
 import android.graphics.Bitmap
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.Transformation
-import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
-import com.bumptech.glide.load.resource.bitmap.BitmapResource
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter
 
@@ -27,7 +25,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter
  */
 open class GPUFilterTransformation<T : GPUImageFilter?>(
     private val mContext: Context?, private val mBitmapPool: BitmapPool?, private val mFilter: T?
-) : Transformation<Bitmap?> {
+) : BitmapTransformation(mBitmapPool) {
 
     constructor(context: Context, filter: T?) : this(
         context,
@@ -35,21 +33,20 @@ open class GPUFilterTransformation<T : GPUImageFilter?>(
         filter
     )
 
+
     override fun transform(
-        resource: Resource<Bitmap?>,
+        pool: BitmapPool?,
+        toTransform: Bitmap?,
         outWidth: Int,
         outHeight: Int
-    ): Resource<Bitmap?>? {
-        return try {
-            val source = resource.get()
-            val gpuImage = GPUImage(mContext)
-            gpuImage.setImage(source)
-            gpuImage.setFilter(mFilter)
-            val bitmap = gpuImage.bitmapWithFilterApplied
-            BitmapResource.obtain(bitmap, mBitmapPool)
-        } catch (e: Exception) {
-            null
+    ): Bitmap? {
+        if (pool == null || toTransform == null) {
+            return null
         }
+        val gpuImage = GPUImage(mContext)
+        gpuImage.setImage(toTransform)
+        gpuImage.setFilter(mFilter)
+        return gpuImage.bitmapWithFilterApplied
     }
 
     override fun getId(): String {

@@ -5,7 +5,6 @@ import android.graphics.PointF
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import jp.co.cyberagent.android.gpuimage.GPUImageVignetteFilter
-import java.util.*
 
 /**
  * @author lsy

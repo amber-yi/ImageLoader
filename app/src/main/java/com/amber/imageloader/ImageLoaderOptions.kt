@@ -108,4 +108,13 @@ class ImageLoaderOptions {
     @CornerType
     var cornerType = LoadConstant.CORNER_ALL
 
+    /**
+     * 是否是黑白
+     */
+    var isGrayscale=false
+
+    /**
+     * 高斯模糊度数 默认0，没有高斯模糊，值越大越模糊
+     */
+    var blurRadius=0
 }

@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amber.imageloader.LoadConstant;
 import com.amber.imageloader.R;
+import com.amber.imageloader.ZImageLoader;
+import com.amber.imageloader.glide.transformations.ColorFilterTransformation;
 import com.amber.imageloader.glide.transformations.CropCircleTransformation;
+import com.amber.imageloader.glide.transformations.GrayscaleTransformation;
 import com.amber.imageloader.glide.transformations.MaskTransformation;
 import com.amber.imageloader.glide.transformations.gpu.VignetteFilterTransformation;
 import com.bumptech.glide.Glide;
@@ -85,11 +88,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Mask: {
                 int width = Utils.dip2px(mContext, 133.33f);
                 int height = Utils.dip2px(mContext, 126.33f);
-                Glide.with(mContext)
-                        .load(R.drawable.check)
+//                Glide.with(mContext)
+//                        .load(R.drawable.gif_test)
+//                        .override(width, height)
+//                        .bitmapTransform(new CenterCrop(mContext),
+//                                new MaskTransformation(mContext, R.drawable.mask_starfish))
+//
+                ZImageLoader.with(mContext)
+                        .load(R.drawable.gif_test)
+                        .asGif()
+                        .grayscale()
+                        .centerCrop(60)
                         .override(width, height)
-                        .bitmapTransform(new CenterCrop(mContext),
-                                new MaskTransformation(mContext, R.drawable.mask_starfish))
                         .into(holder.image);
                 break;
             }
@@ -97,7 +107,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 int width = Utils.dip2px(mContext, 150.0f);
                 int height = Utils.dip2px(mContext, 100.0f);
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .override(width, height)
                         .bitmapTransform(new CenterCrop(mContext),
                                 new MaskTransformation(mContext, R.drawable.mask_chat_right))
@@ -106,20 +116,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             }
             case CropTop:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(
                                 new CropTransformation(mContext, 300, 100, CropTransformation.CropType.TOP))
                         .into(holder.image);
                 break;
             case CropCenter:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new CropTransformation(mContext, 300, 100))
                         .into(holder.image);
                 break;
             case CropBottom:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(
                                 new CropTransformation(mContext, 300, 100, CropTransformation.CropType.BOTTOM))
                         .into(holder.image);
@@ -127,7 +137,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 break;
             case CropSquare:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new CropSquareTransformation(mContext))
                         .into(holder.image);
                 break;
@@ -140,99 +150,94 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         .into(holder.image);
                 break;
             case ColorFilter:
+//                Glide.with(mContext)
+//                        .load(R.drawable.gif_test)
+//                        .skipMemoryCache(true)
+//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                        .bitmapTransform(new CropCircleTransformation(mContext,60,Color.YELLOW))
+//                        .into(holder.image);
                 Glide.with(mContext)
                         .load(R.drawable.gif_test)
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .bitmapTransform(new CropCircleTransformation(mContext,60,Color.YELLOW))
+                        .bitmapTransform(new ColorFilterTransformation(mContext, Color.argb(80, 255, 0, 0)))
                         .into(holder.image);
-//                Glide.with(mContext)
-//                        .load(R.drawable.demo)
-//                        .bitmapTransform(new ColorFilterTransformation(mContext, Color.argb(80, 255, 0, 0)))
-//                        .into(holder.image);
                 break;
             case Grayscale:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
-                        .bitmapTransform(new RoundedCornersTransformation(mContext, 30, 20,
-                                LoadConstant.CORNER_TOP))
+                        .load(R.drawable.gif_test)
+                        .bitmapTransform(new GrayscaleTransformation(mContext))
                         .into(holder.image);
-//                Glide.with(mContext)
-//                        .load(R.drawable.demo)
-//                        .bitmapTransform(new GrayscaleTransformation(mContext))
-//                        .into(holder.image);
                 break;
             case RoundedCorners:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new RoundedCornersTransformation(mContext, 30, 20,
                                 LoadConstant.CORNER_BOTTOM))
                         .into(holder.image);
                 break;
             case Blur:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new BlurTransformation(mContext, 25))
                         .into(holder.image);
                 break;
             case Toon:
                 Glide.with(mContext)
-                        .load(R.drawable.demo)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new ToonFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Sepia:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new SepiaFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Contrast:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new ContrastFilterTransformation(mContext, 2.0f))
                         .into(holder.image);
                 break;
             case Invert:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new InvertFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Pixel:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new PixelationFilterTransformation(mContext, 20))
                         .into(holder.image);
                 break;
             case Sketch:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new SketchFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Swirl:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(
                                 new SwirlFilterTransformation(mContext, 0.5f, 1.0f, new PointF(0.5f, 0.5f)))
                         .into(holder.image);
                 break;
             case Brightness:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new BrightnessFilterTransformation(mContext, 0.5f))
                         .into(holder.image);
                 break;
             case Kuawahara:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new KuwaharaFilterTransformation(mContext, 25))
                         .into(holder.image);
                 break;
             case Vignette:
                 Glide.with(mContext)
-                        .load(R.drawable.check)
+                        .load(R.drawable.gif_test)
                         .bitmapTransform(new VignetteFilterTransformation(mContext, new PointF(0.5f, 0.5f),
                                 new float[]{0.0f, 0.0f, 0.0f}, 0f, 0.75f))
                         .into(holder.image);

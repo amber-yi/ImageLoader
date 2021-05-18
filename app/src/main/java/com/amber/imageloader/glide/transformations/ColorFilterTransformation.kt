@@ -1,4 +1,10 @@
-package com.amber.imageloader.glide.transformations;
+package com.amber.imageloader.glide.transformations
+
+import android.content.Context
+import android.graphics.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 
 /**
  * Copyright (C) 2017 Wasabeef
@@ -15,59 +21,34 @@ package com.amber.imageloader.glide.transformations;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class ColorFilterTransformation(private val mBitmapPool: BitmapPool, private val mColor: Int) :
+    BitmapTransformation(
+        mBitmapPool
+    ) {
+    constructor(context: Context?, color: Int) : this(Glide.get(context).bitmapPool, color) {}
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-
-public class ColorFilterTransformation implements Transformation<Bitmap> {
-
-  private BitmapPool mBitmapPool;
-
-  private int mColor;
-
-  public ColorFilterTransformation(Context context, int color) {
-    this(Glide.get(context).getBitmapPool(), color);
-  }
-
-  public ColorFilterTransformation(BitmapPool pool, int color) {
-    mBitmapPool = pool;
-    mColor = color;
-  }
-
-  @Override
-  public Resource<Bitmap> transform(Resource<Bitmap> resource, int outWidth, int outHeight) {
-    Bitmap source = resource.get();
-
-    int width = source.getWidth();
-    int height = source.getHeight();
-
-    Bitmap.Config config =
-        source.getConfig() != null ? source.getConfig() : Bitmap.Config.ARGB_8888;
-    Bitmap bitmap = mBitmapPool.get(width, height, config);
-    if (bitmap == null) {
-      bitmap = Bitmap.createBitmap(width, height, config);
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int
+    ): Bitmap {
+        val width = toTransform.width
+        val height = toTransform.height
+        val config = if (toTransform.config != null) toTransform.config else Bitmap.Config.ARGB_8888
+        var bitmap = mBitmapPool[width, height, config]
+        if (bitmap == null) {
+            bitmap = Bitmap.createBitmap(width, height, config)
+        }
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.colorFilter = PorterDuffColorFilter(mColor, PorterDuff.Mode.SRC_ATOP)
+        canvas.drawBitmap(toTransform, 0f, 0f, paint)
+        return bitmap
     }
 
-    Canvas canvas = new Canvas(bitmap);
-    Paint paint = new Paint();
-    paint.setAntiAlias(true);
-    paint.setColorFilter(new PorterDuffColorFilter(mColor, PorterDuff.Mode.SRC_ATOP));
-    canvas.drawBitmap(source, 0, 0, paint);
-
-    return BitmapResource.obtain(bitmap, mBitmapPool);
-  }
-
-  @Override public String getId() {
-    return "ColorFilterTransformation(color=" + mColor + ")";
-  }
+    override fun getId(): String {
+        return "ColorFilterTransformation(color=$mColor)"
+    }
 }

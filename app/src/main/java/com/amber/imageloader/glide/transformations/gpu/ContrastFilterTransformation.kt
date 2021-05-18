@@ -32,8 +32,7 @@ class ContrastFilterTransformation @JvmOverloads constructor(
         context,
         Glide.get(context).bitmapPool,
         contrast
-    ) {
-    }
+    )
 
     override fun getId(): String {
         return "ContrastFilterTransformation(contrast=$mContrast)"

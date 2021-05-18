@@ -1,4 +1,10 @@
-package com.amber.imageloader.glide.transformations;
+package com.amber.imageloader.glide.transformations
+
+import android.content.Context
+import android.graphics.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 
 /**
  * Copyright (C) 2017 Wasabeef
@@ -15,57 +21,32 @@ package com.amber.imageloader.glide.transformations;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class GrayscaleTransformation(pool: BitmapPool?) : BitmapTransformation(pool) {
+    constructor(context: Context?) : this(Glide.get(context).bitmapPool) {}
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-
-public class GrayscaleTransformation implements Transformation<Bitmap> {
-
-  private BitmapPool mBitmapPool;
-
-  public GrayscaleTransformation(Context context) {
-    this(Glide.get(context).getBitmapPool());
-  }
-
-  public GrayscaleTransformation(BitmapPool pool) {
-    mBitmapPool = pool;
-  }
-
-  @Override
-  public Resource<Bitmap> transform(Resource<Bitmap> resource, int outWidth, int outHeight) {
-    Bitmap source = resource.get();
-
-    int width = source.getWidth();
-    int height = source.getHeight();
-
-    Bitmap.Config config =
-        source.getConfig() != null ? source.getConfig() : Bitmap.Config.ARGB_8888;
-    Bitmap bitmap = mBitmapPool.get(width, height, config);
-    if (bitmap == null) {
-      bitmap = Bitmap.createBitmap(width, height, config);
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int
+    ): Bitmap {
+        val width = toTransform.width
+        val height = toTransform.height
+        val config = if (toTransform.config != null) toTransform.config else Bitmap.Config.ARGB_8888
+        var bitmap = pool[width, height, config]
+        if (bitmap == null) {
+            bitmap = Bitmap.createBitmap(width, height, config)
+        }
+        val canvas = Canvas(bitmap)
+        val saturation = ColorMatrix()
+        saturation.setSaturation(0f)
+        val paint = Paint()
+        paint.colorFilter = ColorMatrixColorFilter(saturation)
+        canvas.drawBitmap(toTransform, 0f, 0f, paint)
+        return bitmap
     }
 
-    Canvas canvas = new Canvas(bitmap);
-    ColorMatrix saturation = new ColorMatrix();
-    saturation.setSaturation(0f);
-    Paint paint = new Paint();
-    paint.setColorFilter(new ColorMatrixColorFilter(saturation));
-    canvas.drawBitmap(source, 0, 0, paint);
-
-    return BitmapResource.obtain(bitmap, mBitmapPool);
-  }
-
-  @Override public String getId() {
-    return "GrayscaleTransformation()";
-  }
+    override fun getId(): String {
+        return "GrayscaleTransformation()"
+    }
 }

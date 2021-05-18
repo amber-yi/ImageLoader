@@ -1,87 +1,73 @@
-package com.amber.imageloader.glide.transformations;
+package com.amber.imageloader.glide.transformations
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-
-import androidx.annotation.ColorInt;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import android.content.Context
+import android.graphics.*
+import androidx.annotation.ColorInt
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 
 /**
  * @author lsy
  * @date 2021/05/11
  * @description
  */
-public class CropCircleTransformation extends BitmapTransformation {
+class CropCircleTransformation(
+    pool: BitmapPool?,
+    private val borderSize: Float,
+    @param:ColorInt private val borderColor: Int
+) : BitmapTransformation(pool) {
+    constructor(context: Context?) : this(Glide.get(context).bitmapPool, 0f, Color.TRANSPARENT) {}
+    constructor(context: Context?, borderSize: Float, @ColorInt borderColor: Int) : this(
+        Glide.get(
+            context
+        ).bitmapPool, borderSize, borderColor
+    )
 
-    private final float borderSize;
-    private final int borderColor;
-
-    public CropCircleTransformation(Context context) {
-        this(Glide.get(context).getBitmapPool(), 0, Color.TRANSPARENT);
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int
+    ): Bitmap {
+        return circleCrop(pool, toTransform)!!
     }
 
-    public CropCircleTransformation(Context context, float borderSize, @ColorInt int borderColor) {
-        this(Glide.get(context).getBitmapPool(), borderSize, borderColor);
-    }
-
-    public CropCircleTransformation(BitmapPool pool, float borderSize, @ColorInt int borderColor) {
-        super(pool);
-        this.borderSize = borderSize;
-        this.borderColor = borderColor;
-    }
-
-
-    @Override
-    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return circleCrop(pool, toTransform);
-    }
-
-    private Bitmap circleCrop(BitmapPool pool, Bitmap source) {
+    private fun circleCrop(pool: BitmapPool, source: Bitmap?): Bitmap? {
         if (source == null) {
-            return null;
+            return null
         }
-
-        int size = Math.min(source.getWidth(), source.getHeight());
-        int x = (source.getWidth() - size) / 2;
-        int y = (source.getHeight() - size) / 2;
-
-        Bitmap square = Bitmap.createBitmap(source, x, y, size, size);
-        Bitmap circle = pool.get(size, size, Bitmap.Config.ARGB_8888);
+        val size = Math.min(source.width, source.height)
+        val x = (source.width - size) / 2
+        val y = (source.height - size) / 2
+        val square = Bitmap.createBitmap(source, x, y, size, size)
+        var circle = pool[size, size, Bitmap.Config.ARGB_8888]
         if (circle == null) {
-            circle = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            circle = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         }
-
-        Canvas canvas = new Canvas(circle);
-        Paint paint = new Paint();
-        paint.setShader(new BitmapShader(square, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
-        paint.setAntiAlias(true);
-        float r = size / 2f;
-        canvas.drawCircle(r, r, r, paint);
-        if (Float.compare(borderSize, 0f) == 1) {
-            paint.setShader(null);
-            paint.setColor(borderColor);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(borderSize);
+        val canvas = Canvas(circle!!)
+        val paint = Paint()
+        paint.shader =
+            BitmapShader(square, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        paint.isAntiAlias = true
+        val r = size / 2f
+        canvas.drawCircle(r, r, r, paint)
+        if (java.lang.Float.compare(borderSize, 0f) == 1) {
+            paint.shader = null
+            paint.color = borderColor
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = borderSize
             canvas.drawCircle(
-                    r,
-                    r,
-                    r - borderSize / 2f,
-                    paint
-            );
-
+                r,
+                r,
+                r - borderSize / 2f,
+                paint
+            )
         }
-        return circle;
+        return circle
     }
 
-    @Override
-    public String getId() {
-        return "CropCircleTransformation2(borderSize=" + borderSize + ", borderColor=" + borderColor + ")";
+    override fun getId(): String {
+        return "CropCircleTransformation2(borderSize=$borderSize, borderColor=$borderColor)"
     }
 }

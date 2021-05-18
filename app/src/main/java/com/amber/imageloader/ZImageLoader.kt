@@ -20,28 +20,45 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
     private val options = ImageLoaderOptions()
 
     companion object {
+        @JvmStatic
         fun with(context: Context): ZImageLoader {
             val glide = GlideLoader()
             glide.bindLife(context)
             return ZImageLoader(glide)
         }
 
+        @JvmStatic
         fun with(context: Activity): ZImageLoader {
             val glide = GlideLoader()
             glide.bindLife(context)
             return ZImageLoader(glide)
         }
 
+        @JvmStatic
         fun with(context: Fragment): ZImageLoader {
             val glide = GlideLoader()
             glide.bindLife(context)
             return ZImageLoader(glide)
         }
 
+        @JvmStatic
         fun with(context: android.app.Fragment): ZImageLoader {
             val glide = GlideLoader()
             glide.bindLife(context)
             return ZImageLoader(glide)
+        }
+
+        /**
+         * 全局的黑白控制开关，优先级中等，高于单张设置黑白[grayscale]，低于强制设置黑白[forceGrayscale]
+         */
+        @JvmStatic
+        fun updateGlobalGrayscale(isGrayscale: Boolean) {
+            if (isGrayscale) {
+                LoadConfig.allGrayscaleType = 1
+            } else {
+                LoadConfig.allGrayscaleType = 2
+            }
+
         }
     }
 
@@ -256,6 +273,46 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
     fun roundRadius(radius: Float, @CornerType cornerType: Int): ZImageLoader {
         options.roundRadius = radius
         options.cornerType = cornerType
+        return this
+    }
+
+    /**
+     * 单张图片设置黑白，优先级低于全局设置
+     */
+    fun grayscale(): ZImageLoader {
+        when (LoadConfig.allGrayscaleType) {
+            0, 1 -> {
+                options.isGrayscale = true
+            }
+            2 -> {
+                options.isGrayscale = false
+            }
+        }
+        return this
+    }
+
+    /**
+     * 强制设置单张图片黑白类型
+     */
+    fun forceGrayscale(isGrayscale: Boolean): ZImageLoader {
+        options.isGrayscale = isGrayscale
+        return this
+    }
+
+    /**
+     * 高斯模糊，默认25度数，若要调高或调低请调用带参数方法
+     */
+    fun blur(): ZImageLoader {
+        options.blurRadius = 25
+        return this
+    }
+
+    /**
+     * 高斯模糊
+     * @param radius  模糊程度，值越高越模糊
+     */
+    fun blur(radius: Int): ZImageLoader {
+        options.blurRadius = 25
         return this
     }
 
