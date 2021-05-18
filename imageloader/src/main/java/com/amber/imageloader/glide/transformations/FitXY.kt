@@ -3,7 +3,7 @@ package com.amber.imageloader.glide.transformations
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import com.amber.imageloader.glide.LoadUtils
+import com.amber.imageloader.glide.GlideLoadUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -38,7 +38,7 @@ class FitXY constructor(pool: BitmapPool) : BitmapTransformation(pool) {
             pool[outWidth, outHeight, getSafeConfig(toTransform)]
         // We don't add or remove alpha, so keep the alpha setting of the Bitmap we were given.
         TransformationUtils.setAlpha(toTransform, result)
-        LoadUtils.applyMatrix(toTransform,result,matrix)
+        GlideLoadUtils.applyMatrix(toTransform,result,matrix)
         return result
     }
 

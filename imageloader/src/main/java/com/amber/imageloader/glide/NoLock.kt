@@ -1,4 +1,4 @@
-package com.amber.imageloader
+package com.amber.imageloader.glide
 
 import androidx.annotation.NonNull
 import java.util.concurrent.TimeUnit

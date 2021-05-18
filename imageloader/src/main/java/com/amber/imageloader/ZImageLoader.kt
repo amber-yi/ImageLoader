@@ -2,12 +2,18 @@ package com.amber.imageloader
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
+import com.amber.imageloader.annotation.CornerType
+import com.amber.imageloader.config.LoadConfig
+import com.amber.imageloader.constant.LoadConstant
+import com.amber.imageloader.listener.LoadListener
+import com.amber.imageloader.listener.LoadProgressListener
 import glide.GlideLoader
 import java.io.File
 
@@ -17,6 +23,7 @@ import java.io.File
  * @description
  */
 class ZImageLoader(private val imageLoader: ImageLoader) {
+
     private val options = ImageLoaderOptions()
 
     companion object {
@@ -58,7 +65,6 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
             } else {
                 LoadConfig.allGrayscaleType = 2
             }
-
         }
     }
 
@@ -367,6 +373,26 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
         return this
     }
 
+    /**
+     *
+     * @param listener 加载监听 泛型类型参考如下
+     * [asBitmap] is [android.graphics.Bitmap]
+     * [asFile] is [java.io.File]
+     * [downloadOnly] is  [java.io.File]
+     * [downloadOnlyTo] is  [java.io.File]
+     * other is [android.graphics.drawable.Drawable]
+     */
+    fun listener(listener: LoadListener<*>?): ZImageLoader {
+
+        return this
+    }
+
+    /**
+     * 带进度的加载监听 todo 待完成
+     */
+    fun listener(listener: LoadProgressListener<*>): ZImageLoader {
+        return this
+    }
 
     fun into(imageVew: ImageView) {
         imageLoader.into(imageVew, options)

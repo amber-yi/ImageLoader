@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.amber.imageloader.ImageLoader
 import com.amber.imageloader.ImageLoaderOptions
-import com.amber.imageloader.LoadConstant
+import com.amber.imageloader.constant.LoadConstant
 import com.amber.imageloader.glide.transformations.*
 
 import com.bumptech.glide.*

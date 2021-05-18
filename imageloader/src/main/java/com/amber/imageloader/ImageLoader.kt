@@ -14,20 +14,20 @@ interface ImageLoader {
      */
     fun bindLife(life: Any?)
 
-    fun into(imageVew: ImageView, options: com.amber.imageloader.ImageLoaderOptions)
+    fun into(imageVew: ImageView, options: ImageLoaderOptions)
 
-    fun into(view: View, options: com.amber.imageloader.ImageLoaderOptions)
+    fun into(view: View, options: ImageLoaderOptions)
 
     /**
      * 预加载，内存与磁盘
      */
-    fun preload(options: com.amber.imageloader.ImageLoaderOptions)
+    fun preload(options: ImageLoaderOptions)
 
-    fun preload(width: Int, height: Int, options: com.amber.imageloader.ImageLoaderOptions)
+    fun preload(width: Int, height: Int, options: ImageLoaderOptions)
 
-    fun downloadOnly(options: com.amber.imageloader.ImageLoaderOptions)
+    fun downloadOnly(options: ImageLoaderOptions)
 
-    fun downloadOnlyTo(path: String, options: com.amber.imageloader.ImageLoaderOptions)
+    fun downloadOnlyTo(path: String, options: ImageLoaderOptions)
 
-    fun downloadOnlyTo(path: String, notify: Boolean, options: com.amber.imageloader.ImageLoaderOptions)
+    fun downloadOnlyTo(path: String, notify: Boolean, options: ImageLoaderOptions)
 }

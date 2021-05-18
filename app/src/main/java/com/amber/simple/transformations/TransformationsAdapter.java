@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amber.imageloader.LoadConstant;
+import com.amber.imageloader.constant.LoadConstant;
 import com.amber.imageloader.ZImageLoader;
 import com.amber.imageloader.glide.transformations.ColorFilterTransformation;
 import com.amber.imageloader.glide.transformations.CropCircleTransformation;

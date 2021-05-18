@@ -2,8 +2,8 @@ package com.amber.imageloader.glide.transformations
 
 import android.content.Context
 import android.graphics.*
-import com.amber.imageloader.CornerType
-import com.amber.imageloader.LoadConstant
+import com.amber.imageloader.annotation.CornerType
+import com.amber.imageloader.constant.LoadConstant
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -28,18 +28,18 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
  */
 class RoundedCornersTransformation @JvmOverloads constructor(
     pool: BitmapPool?, private val mRadius: Float, margin: Int,
-    @com.amber.imageloader.CornerType cornerType: Int = com.amber.imageloader.LoadConstant.CORNER_ALL
+    @CornerType cornerType: Int = LoadConstant.CORNER_ALL
 ) : BitmapTransformation(pool) {
     private val mDiameter: Float
     private val mMargin: Int
 
-    @com.amber.imageloader.CornerType
+    @CornerType
     private val mCornerType: Int
 
     @JvmOverloads
     constructor(
         context: Context?, radius: Float, margin: Int,
-        @com.amber.imageloader.CornerType cornerType: Int = com.amber.imageloader.LoadConstant.CORNER_ALL
+        @CornerType cornerType: Int = LoadConstant.CORNER_ALL
     ) : this(Glide.get(context).bitmapPool, radius, margin, cornerType) {
     }
 
@@ -71,7 +71,7 @@ class RoundedCornersTransformation @JvmOverloads constructor(
         val right = width - mMargin
         val bottom = height - mMargin
         when (mCornerType) {
-            com.amber.imageloader.LoadConstant.CORNER_ALL -> canvas.drawRoundRect(
+            LoadConstant.CORNER_ALL -> canvas.drawRoundRect(
                 RectF(
                     mMargin.toFloat(),
                     mMargin.toFloat(),
@@ -79,50 +79,50 @@ class RoundedCornersTransformation @JvmOverloads constructor(
                     bottom
                 ), mRadius, mRadius, paint
             )
-            com.amber.imageloader.LoadConstant.CORNER_TOP_LEFT -> drawTopLeftRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_TOP_RIGHT -> drawTopRightRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_BOTTOM_LEFT -> drawBottomLeftRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_BOTTOM_RIGHT -> drawBottomRightRoundRect(
+            LoadConstant.CORNER_TOP_LEFT -> drawTopLeftRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_TOP_RIGHT -> drawTopRightRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_BOTTOM_LEFT -> drawBottomLeftRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_BOTTOM_RIGHT -> drawBottomRightRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_TOP -> drawTopRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_BOTTOM -> drawBottomRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_LEFT -> drawLeftRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_RIGHT -> drawRightRoundRect(canvas, paint, right, bottom)
-            com.amber.imageloader.LoadConstant.CORNER_OTHER_TOP_LEFT -> drawOtherTopLeftRoundRect(
+            LoadConstant.CORNER_TOP -> drawTopRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_BOTTOM -> drawBottomRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_LEFT -> drawLeftRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_RIGHT -> drawRightRoundRect(canvas, paint, right, bottom)
+            LoadConstant.CORNER_OTHER_TOP_LEFT -> drawOtherTopLeftRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_OTHER_TOP_RIGHT -> drawOtherTopRightRoundRect(
+            LoadConstant.CORNER_OTHER_TOP_RIGHT -> drawOtherTopRightRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_OTHER_BOTTOM_LEFT -> drawOtherBottomLeftRoundRect(
+            LoadConstant.CORNER_OTHER_BOTTOM_LEFT -> drawOtherBottomLeftRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_OTHER_BOTTOM_RIGHT -> drawOtherBottomRightRoundRect(
+            LoadConstant.CORNER_OTHER_BOTTOM_RIGHT -> drawOtherBottomRightRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_DIAGONAL_FROM_TOP_LEFT -> drawDiagonalFromTopLeftRoundRect(
+            LoadConstant.CORNER_DIAGONAL_FROM_TOP_LEFT -> drawDiagonalFromTopLeftRoundRect(
                 canvas,
                 paint,
                 right,
                 bottom
             )
-            com.amber.imageloader.LoadConstant.CORNER_DIAGONAL_FROM_TOP_RIGHT -> drawDiagonalFromTopRightRoundRect(
+            LoadConstant.CORNER_DIAGONAL_FROM_TOP_RIGHT -> drawDiagonalFromTopRightRoundRect(
                 canvas,
                 paint,
                 right,

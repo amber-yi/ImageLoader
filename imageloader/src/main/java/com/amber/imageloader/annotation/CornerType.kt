@@ -1,6 +1,7 @@
-package com.amber.imageloader
+package com.amber.imageloader.annotation
 
 import androidx.annotation.IntDef
+import com.amber.imageloader.constant.LoadConstant
 
 /**
  * @author lsy

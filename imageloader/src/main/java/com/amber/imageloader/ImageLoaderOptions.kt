@@ -2,6 +2,10 @@ package com.amber.imageloader
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
+import com.amber.imageloader.annotation.CornerType
+import com.amber.imageloader.annotation.LoadScaleType
+import com.amber.imageloader.annotation.LoadType
+import com.amber.imageloader.constant.LoadConstant
 
 /**
  * @author lsy
@@ -48,8 +52,8 @@ class ImageLoaderOptions {
     /**
      * 加载类型 默认为drawable
      */
-    @com.amber.imageloader.LoadType
-    var loadAsType = com.amber.imageloader.LoadConstant.LOAD_AS_DRAWABLE
+    @LoadType
+    var loadAsType = LoadConstant.LOAD_AS_DRAWABLE
 
     /**
      * 加载完成展示的动画类型，默认无动画
@@ -59,8 +63,8 @@ class ImageLoaderOptions {
     /**
      * 缩放类型 默认fit_center
      */
-    @com.amber.imageloader.LoadScaleType
-    var scaleType = com.amber.imageloader.LoadConstant.SCALE_FIT_CENTER
+    @LoadScaleType
+    var scaleType = LoadConstant.SCALE_FIT_CENTER
 
     /**
      * 边框大小
@@ -85,7 +89,7 @@ class ImageLoaderOptions {
      * 同一资源所加载策略应该一样
      * 如果第一次不跳过磁盘缓存，第二次加载设置跳过磁盘缓存不会清除之前磁盘缓存
      */
-    var diskCacheCache = com.amber.imageloader.LoadConstant.DISK_CACHE_AUTOMATIC
+    var diskCacheCache = LoadConstant.DISK_CACHE_AUTOMATIC
 
     /**
      *最大宽度，默认不限制
@@ -106,7 +110,7 @@ class ImageLoaderOptions {
      * 圆角类型，默认八个方向全部都有圆角
      */
     @CornerType
-    var cornerType = com.amber.imageloader.LoadConstant.CORNER_ALL
+    var cornerType = LoadConstant.CORNER_ALL
 
     /**
      * 是否是黑白

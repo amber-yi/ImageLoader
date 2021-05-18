@@ -2,6 +2,7 @@ package com.amber.simple.transformations;
 
 import android.os.Bundle;
 
+import androidx.annotation.IntRange;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -50,5 +51,9 @@ public class TransformationsActivity extends AppCompatActivity {
         dataSet.add(TransformationsAdapter.Type.Vignette);
 
         recyclerView.setAdapter(new TransformationsAdapter(this, dataSet));
+    }
+
+    public void aaa(@IntRange(from = 0,to = 100) int a){
+
     }
 }

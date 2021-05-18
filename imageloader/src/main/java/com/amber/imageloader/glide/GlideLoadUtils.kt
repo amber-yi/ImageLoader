@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock
  * @date 2021/05/11
  * @description
  */
-object LoadUtils {
+object GlideLoadUtils {
 
     private const val PAINT_FLAGS = Paint.DITHER_FLAG or Paint.FILTER_BITMAP_FLAG
     private val DEFAULT_PAINT = Paint(PAINT_FLAGS)
@@ -82,6 +82,6 @@ object LoadUtils {
      * available and therefore does not impact performance
      */
     private val BITMAP_DRAWABLE_LOCK: Lock =
-        if (MODELS_REQUIRING_BITMAP_LOCK.contains(Build.MODEL)) ReentrantLock() else com.amber.imageloader.NoLock()
+        if (MODELS_REQUIRING_BITMAP_LOCK.contains(Build.MODEL)) ReentrantLock() else NoLock()
 
 }

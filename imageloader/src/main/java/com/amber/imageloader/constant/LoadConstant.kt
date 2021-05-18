@@ -1,4 +1,4 @@
-package com.amber.imageloader
+package com.amber.imageloader.constant
 
 /**
  * @author lsy

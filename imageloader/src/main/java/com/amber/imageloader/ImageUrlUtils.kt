@@ -1,12 +1,15 @@
 package com.amber.imageloader
 
+import com.amber.imageloader.annotation.SizeLevel
+import com.amber.imageloader.constant.LoadConstant
+
 /**
  * @author lsy
  * @date 2021/05/10
  * @description
  */
 object ImageUrlUtils {
-    fun getPicUrlBySize(picUrl: String?, @com.amber.imageloader.SizeLevel size: Int): String {
+    fun getPicUrlBySize(picUrl: String?, @SizeLevel size: Int): String {
         picUrl?.let {
             val x = it.lastIndexOf(".")
             if (x != -1) {
@@ -16,13 +19,13 @@ object ImageUrlUtils {
                     prefix = prefix.substring(0, prefix.length - 3)
                 }
                 var url = when (size) {
-                    com.amber.imageloader.LoadConstant.LARGE -> {
+                    LoadConstant.LARGE -> {
                         prefix + "_s1." + subfix
                     }
-                    com.amber.imageloader.LoadConstant.MIDDLE -> {
+                    LoadConstant.MIDDLE -> {
                         prefix + "_s2." + subfix
                     }
-                    com.amber.imageloader.LoadConstant.SMALL -> {
+                    LoadConstant.SMALL -> {
                         prefix + "_s3." + subfix
                     }
 
@@ -32,7 +35,7 @@ object ImageUrlUtils {
                 }
                 // 如果是相对地址，拼接成绝对地址
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    url = com.amber.imageloader.LoadConstant.BASE_IGM + url
+                    url = LoadConstant.BASE_IGM + url
                 }
             }
             return ""
