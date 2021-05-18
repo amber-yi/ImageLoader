@@ -1,4 +1,4 @@
-package com.amber.imageloader.test;
+package com.amber.simple.transformations;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,13 +12,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amber.imageloader.LoadConstant;
-import com.amber.imageloader.R;
 import com.amber.imageloader.ZImageLoader;
 import com.amber.imageloader.glide.transformations.ColorFilterTransformation;
 import com.amber.imageloader.glide.transformations.CropCircleTransformation;
 import com.amber.imageloader.glide.transformations.GrayscaleTransformation;
 import com.amber.imageloader.glide.transformations.MaskTransformation;
 import com.amber.imageloader.glide.transformations.gpu.VignetteFilterTransformation;
+import com.amber.simple.R;
+import com.amber.simple.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -42,7 +43,7 @@ import com.amber.imageloader.glide.transformations.gpu.ToonFilterTransformation;
 /**
  * Created by Wasabeef on 2015/01/11.
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
+public class TransformationsAdapter extends RecyclerView.Adapter<TransformationsAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Type> mDataSet;
@@ -71,7 +72,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         Vignette
     }
 
-    public MainAdapter(Context context, List<Type> dataSet) {
+    public TransformationsAdapter(Context context, List<Type> dataSet) {
         mContext = context;
         mDataSet = dataSet;
     }

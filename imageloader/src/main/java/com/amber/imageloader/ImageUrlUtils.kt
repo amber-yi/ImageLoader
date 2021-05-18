@@ -6,7 +6,7 @@ package com.amber.imageloader
  * @description
  */
 object ImageUrlUtils {
-    fun getPicUrlBySize(picUrl: String?, @SizeLevel size: Int): String {
+    fun getPicUrlBySize(picUrl: String?, @com.amber.imageloader.SizeLevel size: Int): String {
         picUrl?.let {
             val x = it.lastIndexOf(".")
             if (x != -1) {
@@ -16,13 +16,13 @@ object ImageUrlUtils {
                     prefix = prefix.substring(0, prefix.length - 3)
                 }
                 var url = when (size) {
-                    LoadConstant.LARGE -> {
+                    com.amber.imageloader.LoadConstant.LARGE -> {
                         prefix + "_s1." + subfix
                     }
-                    LoadConstant.MIDDLE -> {
+                    com.amber.imageloader.LoadConstant.MIDDLE -> {
                         prefix + "_s2." + subfix
                     }
-                    LoadConstant.SMALL -> {
+                    com.amber.imageloader.LoadConstant.SMALL -> {
                         prefix + "_s3." + subfix
                     }
 
@@ -32,7 +32,7 @@ object ImageUrlUtils {
                 }
                 // 如果是相对地址，拼接成绝对地址
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    url = LoadConstant.BASE_IGM + url
+                    url = com.amber.imageloader.LoadConstant.BASE_IGM + url
                 }
             }
             return ""

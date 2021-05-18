@@ -1,4 +1,4 @@
-package com.amber.imageloader.test
+package com.amber.simple.zload
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -1,13 +1,10 @@
-package com.amber.imageloader.glide
+package glide
 
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -19,8 +16,8 @@ import com.amber.imageloader.ImageLoader
 import com.amber.imageloader.ImageLoaderOptions
 import com.amber.imageloader.LoadConstant
 import com.amber.imageloader.glide.transformations.*
+
 import com.bumptech.glide.*
-import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -713,7 +710,7 @@ class GlideLoader : ImageLoader {
                 LoadConstant.DISK_CACHE_RESOURCE -> {
                     request.diskCacheStrategy(DiskCacheStrategy.RESULT)
                 }
-                LoadConstant.DISK_CACHE_AUTOMATIC -> {
+               LoadConstant.DISK_CACHE_AUTOMATIC -> {
                     if (options.source is String && (options.source as String).startsWith("http")) {
                         request.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     } else {

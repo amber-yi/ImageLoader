@@ -6,7 +6,6 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.Build
 import androidx.annotation.NonNull
-import com.amber.imageloader.NoLock
 import java.util.*
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
@@ -83,6 +82,6 @@ object LoadUtils {
      * available and therefore does not impact performance
      */
     private val BITMAP_DRAWABLE_LOCK: Lock =
-        if (MODELS_REQUIRING_BITMAP_LOCK.contains(Build.MODEL)) ReentrantLock() else NoLock()
+        if (MODELS_REQUIRING_BITMAP_LOCK.contains(Build.MODEL)) ReentrantLock() else com.amber.imageloader.NoLock()
 
 }

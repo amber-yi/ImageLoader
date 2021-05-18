@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
-import com.amber.imageloader.glide.GlideLoader
+import glide.GlideLoader
 import java.io.File
 
 /**

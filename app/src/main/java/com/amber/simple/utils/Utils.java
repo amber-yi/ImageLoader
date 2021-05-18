@@ -1,4 +1,4 @@
-package com.amber.imageloader.test;
+package com.amber.simple.utils;
 
 /**
  * Copyright (C) 2017 Wasabeef
