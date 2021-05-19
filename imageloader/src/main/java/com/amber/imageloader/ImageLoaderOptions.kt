@@ -6,6 +6,7 @@ import com.amber.imageloader.annotation.CornerType
 import com.amber.imageloader.annotation.LoadScaleType
 import com.amber.imageloader.annotation.LoadType
 import com.amber.imageloader.constant.LoadConstant
+import com.amber.imageloader.listener.LoadListener
 
 /**
  * @author lsy
@@ -115,10 +116,12 @@ class ImageLoaderOptions {
     /**
      * 是否是黑白
      */
-    var isGrayscale=false
+    var isGrayscale = false
 
     /**
      * 高斯模糊度数 默认0，没有高斯模糊，值越大越模糊
      */
-    var blurRadius=0
+    var blurRadius = 0
+
+    var listener: LoadListener<*>? = null
 }

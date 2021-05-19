@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.amber.simple.transformations.TransformationsActivity">
+
+        </activity>
+
+        <activity android:name=".zload.ZLoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

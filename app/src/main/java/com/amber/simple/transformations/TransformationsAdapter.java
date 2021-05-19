@@ -1,8 +1,11 @@
 package com.amber.simple.transformations;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import com.amber.imageloader.glide.transformations.CropCircleTransformation;
 import com.amber.imageloader.glide.transformations.GrayscaleTransformation;
 import com.amber.imageloader.glide.transformations.MaskTransformation;
 import com.amber.imageloader.glide.transformations.gpu.VignetteFilterTransformation;
+import com.amber.imageloader.listener.LoadListener;
 import com.amber.simple.R;
 import com.amber.simple.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -39,6 +43,9 @@ import com.amber.imageloader.glide.transformations.gpu.SepiaFilterTransformation
 import com.amber.imageloader.glide.transformations.gpu.SketchFilterTransformation;
 import com.amber.imageloader.glide.transformations.gpu.SwirlFilterTransformation;
 import com.amber.imageloader.glide.transformations.gpu.ToonFilterTransformation;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by Wasabeef on 2015/01/11.
@@ -89,19 +96,13 @@ public class TransformationsAdapter extends RecyclerView.Adapter<Transformations
             case Mask: {
                 int width = Utils.dip2px(mContext, 133.33f);
                 int height = Utils.dip2px(mContext, 126.33f);
-//                Glide.with(mContext)
-//                        .load(R.drawable.gif_test)
-//                        .override(width, height)
-//                        .bitmapTransform(new CenterCrop(mContext),
-//                                new MaskTransformation(mContext, R.drawable.mask_starfish))
-//
-                ZImageLoader.with(mContext)
+                Glide.with(mContext)
                         .load(R.drawable.gif_test)
-                        .asGif()
-                        .grayscale()
-                        .centerCrop(60)
                         .override(width, height)
+                        .bitmapTransform(new CenterCrop(mContext),
+                                new MaskTransformation(mContext, R.drawable.mask_starfish))
                         .into(holder.image);
+
                 break;
             }
             case NinePatchMask: {

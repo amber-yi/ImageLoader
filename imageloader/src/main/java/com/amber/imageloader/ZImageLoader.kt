@@ -383,7 +383,7 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
      * other is [android.graphics.drawable.Drawable]
      */
     fun listener(listener: LoadListener<*>?): ZImageLoader {
-
+        options.listener = listener
         return this
     }
 
@@ -391,6 +391,7 @@ class ZImageLoader(private val imageLoader: ImageLoader) {
      * 带进度的加载监听 todo 待完成
      */
     fun listener(listener: LoadProgressListener<*>): ZImageLoader {
+        options.listener = listener
         return this
     }
 

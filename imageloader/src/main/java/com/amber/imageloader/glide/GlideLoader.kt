@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -16,8 +17,10 @@ import com.amber.imageloader.ImageLoader
 import com.amber.imageloader.ImageLoaderOptions
 import com.amber.imageloader.constant.LoadConstant
 import com.amber.imageloader.glide.transformations.*
+import com.amber.imageloader.listener.LoadListener
 
 import com.bumptech.glide.*
+import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -274,9 +277,10 @@ class GlideLoader : ImageLoader {
                     )
                 )
             }
-
-            request.transform(*transformations.toTypedArray())
-
+            if (transformations.size > 0) {
+                val multiTrans = MultiTransformation(*transformations.toTypedArray())
+                request.transform(multiTrans)
+            }
             request.listener(object : RequestListener<Any?, Bitmap> {
                 override fun onException(
                     e: Exception?,
@@ -284,6 +288,7 @@ class GlideLoader : ImageLoader {
                     target: Target<Bitmap>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.onLoadFailure(e, e?.message ?: "")
                     return false
                 }
 
@@ -294,6 +299,13 @@ class GlideLoader : ImageLoader {
                     isFromMemoryCache: Boolean,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.let {
+                        try {
+                            (options.listener as LoadListener<Bitmap>).onLoadSuccess(resource)
+                        } catch (e: Exception) {
+                            Log.e("GlideLoader", "loadToBitmap LoadListener type is error")
+                        }
+                    }
                     return false
                 }
             })
@@ -434,7 +446,6 @@ class GlideLoader : ImageLoader {
                 transformations.add(GrayscaleTransformation(context))
             }
             //...后续添加更多trans
-
             //设置圆角
             if (options.roundRadius != 0f) {
                 transformations.add(
@@ -446,8 +457,10 @@ class GlideLoader : ImageLoader {
                     )
                 )
             }
-
-            request.transformFrame(*transformations.toTypedArray())
+            if (transformations.size > 0) {
+                val multiTrans = MultiTransformation(*transformations.toTypedArray())
+                request.transformFrame(multiTrans)
+            }
 
             request.listener(object : RequestListener<Any?, GifDrawable> {
                 override fun onException(
@@ -456,6 +469,7 @@ class GlideLoader : ImageLoader {
                     target: Target<GifDrawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.onLoadFailure(e, e?.message ?: "")
                     return false
                 }
 
@@ -466,6 +480,13 @@ class GlideLoader : ImageLoader {
                     isFromMemoryCache: Boolean,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.let {
+                        try {
+                            (options.listener as LoadListener<Drawable>).onLoadSuccess(resource)
+                        } catch (e: Exception) {
+                            Log.e("GlideLoader", "loadToGif LoadListener type is error ")
+                        }
+                    }
                     return false
                 }
 
@@ -612,7 +633,7 @@ class GlideLoader : ImageLoader {
             }
             //高斯模糊
             if (options.blurRadius > 0) {
-                transformations.add(BlurTransformation(context,options.blurRadius))
+                transformations.add(BlurTransformation(context, options.blurRadius))
             }
             //...后续添加更多trans
 
@@ -627,8 +648,10 @@ class GlideLoader : ImageLoader {
                     )
                 )
             }
-
-            request.transform(*transformations.toTypedArray())
+            if (transformations.size > 0) {
+                val multiTrans = MultiTransformation(*transformations.toTypedArray())
+                request.bitmapTransform(multiTrans)
+            }
 
             request.listener(object : RequestListener<Any?, GlideDrawable> {
                 override fun onException(
@@ -637,6 +660,7 @@ class GlideLoader : ImageLoader {
                     target: Target<GlideDrawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.onLoadFailure(e, e?.message ?: "")
                     return false
                 }
 
@@ -647,6 +671,13 @@ class GlideLoader : ImageLoader {
                     isFromMemoryCache: Boolean,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.let {
+                        try {
+                            (options.listener as LoadListener<Drawable>).onLoadSuccess(resource)
+                        } catch (e: Exception) {
+                            Log.e("GlideLoader", "loadToGif LoadListener type is error ")
+                        }
+                    }
                     return false
                 }
 
@@ -710,7 +741,7 @@ class GlideLoader : ImageLoader {
                 LoadConstant.DISK_CACHE_RESOURCE -> {
                     request.diskCacheStrategy(DiskCacheStrategy.RESULT)
                 }
-               LoadConstant.DISK_CACHE_AUTOMATIC -> {
+                LoadConstant.DISK_CACHE_AUTOMATIC -> {
                     if (options.source is String && (options.source as String).startsWith("http")) {
                         request.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     } else {
@@ -723,6 +754,32 @@ class GlideLoader : ImageLoader {
                 request.override(options.maxWidth, options.maxHeight)
             }
 
+            val transformations: ArrayList<BitmapTransformation> = ArrayList()
+            //设置黑白
+            if (options.isGrayscale) {
+                transformations.add(GrayscaleTransformation(context))
+            }
+            //高斯模糊
+            if (options.blurRadius > 0) {
+                transformations.add(BlurTransformation(context, options.blurRadius))
+            }
+            //...后续添加更多trans
+
+            //设置圆角
+            if (options.roundRadius != 0f) {
+                transformations.add(
+                    RoundedCornersTransformation(
+                        context,
+                        options.roundRadius,
+                        0,
+                        options.cornerType
+                    )
+                )
+            }
+            if (transformations.size > 0) {
+                val multiTrans = MultiTransformation(*transformations.toTypedArray())
+                request.bitmapTransform(multiTrans)
+            }
             request.listener(object : RequestListener<Any?, GlideDrawable> {
                 override fun onException(
                     e: Exception?,
@@ -730,6 +787,7 @@ class GlideLoader : ImageLoader {
                     target: Target<GlideDrawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    options.listener?.onLoadFailure(e, e?.message ?: "")
                     return false
                 }
 
@@ -749,11 +807,6 @@ class GlideLoader : ImageLoader {
                     resource: File?,
                     glideAnimation: GlideAnimation<in File?>?
                 ) {
-                    if (path == null || path == "") {
-                        //下载在glide默认地址，不需要复制到其他地方
-                        return
-                    }
-
                     if (resource == null) {
                         //下载文件为空
                         Log.e(
@@ -770,6 +823,18 @@ class GlideLoader : ImageLoader {
                         )
                         return
                     }
+                    if (path == null || path == "") {
+                        //下载在glide默认地址，不需要复制到其他地方
+                        options.listener?.let {
+                            try {
+                                (options.listener as LoadListener<File>).onLoadSuccess(resource)
+                            } catch (e: Exception) {
+                                Log.e("GlideLoader", "loadToFile LoadListener type is error ")
+                            }
+                        }
+                        return
+                    }
+
                     val file = resource.copyTo(File(path))
                     if (notify) {
                         val values = ContentValues()
@@ -779,6 +844,13 @@ class GlideLoader : ImageLoader {
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                             values
                         )
+                    }
+                    options.listener?.let {
+                        try {
+                            (options.listener as LoadListener<File>).onLoadSuccess(file)
+                        } catch (e: Exception) {
+                            Log.e("GlideLoader", "loadToFile LoadListener type is error ")
+                        }
                     }
                 }
             })
